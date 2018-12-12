@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    
+    <title>HTML5 Local Storage Example</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <!-- include Bootstrap CSS for layout -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  
+  <body>
+    <div class="container">
+     
+      
+      <form method="post" class="form-horizontal">
+        <fieldset>
+          <legend>Local Storage Test</legend>  
+
+         
+      
+          <div class="control-group">
+            <label class="control-label" for="name">PName</label>
+            <div class="controls">
+              <input class="input-xlarge" type="text" name="Pid" id="Pid" value="" maxlength="50">
+            </div>
+          </div>
+		 
+          <div class="control-group">
+            <label class="control-label" for="email">PType </label>
+            <div class="controls">
+              <input class="input-xlarge" type="text" name="Ptid" id="Ptid" value="" maxlength="150">
+            </div>
+          </div>
+         <div class="control-group">
+            <label class="control-label" for="name">PQty</label>
+            <div class="controls">
+              <input class="input-xlarge" type="text" name="Qty" id="Qty" value="" maxlength="50">
+            </div>
+          </div>
+          
+          
+               
+        </fieldset>                        
+        &nbsp;
+        <div class="form-actions">
+          <input type="button" name="submit" onclick="ADD();" id="submit" value="Add" class="btn btn-primary">
+		    <input type="button" name="submit" onclick="Show();" id="show" value="show" class="btn btn-primary">
+			 <input type="button" name="submit" onclick="UpdateQuantity();" id="update" value="Update" class="btn btn-primary">
+			  <input type="button" name="submit" onclick="RemoveQuantity();" id="Remove" value="Remove" class="btn btn-primary">
+        </div>
+      </form>  
+    </div>
+    
+    <!-- include jQuery library -->
+  
+    <script>
+	    $(document).ready(function() 
+		{
+		 var groups = [
+		{ "gid": 28, "name": "Group 1", "ishidden": false, "isprivate": false },
+		{ "gid": 16, "name": "Group 2", "ishidden": true, "isprivate": false },
+		{ "gid": 31, "name": "Group 3", "ishidden": true, "isprivate": false },
+		{ "gid": 11, "name": "Group 4", "ishidden": false, "isprivate": false },
+		{ "gid": 23, "name": "Group 5", "ishidden": false, "isprivate": false }
+		]
+		
+		var lim = groups.length;
+		for (var i = 0; i < lim; i++){
+		 if (groups[i].gid == 31)
+		 { 
+			 // alert("Element Found");
+			  //alert(groups[i].gid);
+			  console.log(groups[i].gid);
+			    console.log("Deleting " + groups[i].gid );		 
+			  delete groups[i]  ;	
+			
+		 }
+		 else
+		 {
+		 console.log("Other Element"+groups[i].gid);
+		 }
+		}
+		var newlim=groups.length;
+		for (var i = 0; i < newlim; i++)
+		{
+		if(groups[i])
+		{
+		  		  
+		 console.log("Element from updated Object"+groups[i].gid);
+		 console.log(groups[i].gid,groups[i].name,groups[i].ishidden,groups[i].isprivate);
+		 }
+		}
+		
+		///Updated JsonnItem
+		var Ulim = groups.length;
+		for (var i = 0; i < Ulim; i++){
+		if(groups[i])
+		{
+		 if (groups[i].gid == 11)
+		 { 
+			 groups[i].name="Updted Froup Name " 		  
+			
+		 }
+		  
+		}
+		}
+		///List from updated item
+		var newlimUpdated=groups.length;
+		for (var i = 0; i < newlimUpdated; i++)
+		{
+		if(groups[i])
+		{
+		  		  
+		 console.log("Element from updated list item"+groups[i].gid);
+		 console.log(groups[i].gid,groups[i].name,groups[i].ishidden,groups[i].isprivate);
+		 }
+		}
+		
+		//Add Item in json object 
+		Item = {};
+		Item ["gid"] = 50;
+        Item ["name"] = "Yograj";
+		Item ["ishidden"]=true;
+		Item ["isprivate"]=false;
+		
+		var NewItemJson = JSON.stringify(Item);
+		groups.push(Item);
+		var addlim=groups.length;
+		for (var i = 0; i < addlim; i++)
+		{
+		if(groups[i])
+		{
+		  		  
+		 console.log("Element from new added items"+groups[i].gid);
+		 console.log(groups[i].gid,groups[i].name,groups[i].ishidden,groups[i].isprivate);
+		 }
+		}
+		
+		});
+	function ADD()
+	{
+		 var CartItems=[];
+		 var Pid=$("#Pid").val()
+	     var Ptid=$("#Ptid").val()
+		 var Qty=$("#Qty").val()
+		 
+		Item = {};
+	    Item ["ProducID"] = Pid;
+        Item ["PQuantity"] = Qty;
+		Item ["Ptid"]=Ptid;
+		 	 
+		 if(localStorage.getItem('CartItems')!=null)
+		 {
+		   CartItems.push(localStorage.getItem('CartItems'));
+		   CartItems.push(JSON.stringify(Item));
+		   localStorage.removeItem('CartItems');
+	       localStorage.setItem('CartItems',CartItems);
+		 }
+		 else
+		 {
+		  CartItems.push(JSON.stringify(Item));
+		  localStorage.setItem('CartItems',CartItems);
+		 }
+		 alert(JSON.stringify(JSON.parse('['+localStorage.getItem('CartItems')+']'))); 
+	}
+	
+	 function Show()
+	 {
+	 alert(JSON.stringify(JSON.parse('['+localStorage.getItem('CartItems')+']')));
+	 }
+	 
+	 function UpdateQuantity()
+	 {
+	    var CartItems=[];
+		var CartItemNew=[];
+		var Pid=$("#Pid").val()
+	    var Ptid=$("#Ptid").val()
+		var Qty=$("#Qty").val()
+		CartItems=JSON.parse('['+localStorage.getItem('CartItems')+']');
+		 
+		var CartItemLength = CartItems.length;
+		for (var i = 0; i < CartItemLength; i++){
+		if(CartItems[i])
+		{
+		if (CartItems[i].ProducID == Pid)
+		{ 
+			 CartItems[i].PQuantity=Qty;
+			CartItems[i].Ptid=Ptid;			 
+		}
+		}
+		CartItemNew.push(JSON.stringify(CartItems[i]));
+		}
+	 
+		localStorage.removeItem('CartItems');
+	    localStorage.setItem('CartItems',CartItemNew);
+		alert(JSON.stringify(JSON.parse('['+localStorage.getItem('CartItems')+']')));	  
+     
+	 }
+	 
+	 function RemoveQuantity()
+	 {
+	 
+	    var CartItems=[];
+		var CartItemNew=[];
+		var Pid=$("#Pid").val()
+	    var Ptid=$("#Ptid").val()
+		var Qty=$("#Qty").val()
+		CartItems=JSON.parse('['+localStorage.getItem('CartItems')+']');
+		 
+		var CartItemLength = CartItems.length;
+		for (var i = 0; i < CartItemLength; i++){
+		if(CartItems[i])
+		{
+		if (CartItems[i].ProducID == Pid)
+		{ 
+			 delete CartItems[i]; 		 
+		}
+		else
+		{
+		CartItemNew.push(JSON.stringify(CartItems[i]));
+		}
+		}
+		
+		}
+	 	localStorage.removeItem('CartItems');
+	    localStorage.setItem('CartItems',CartItemNew);
+		alert(JSON.stringify(JSON.parse('['+localStorage.getItem('CartItems')+']')));	
+	 }
+    </script>
+  </body>
+</html>
